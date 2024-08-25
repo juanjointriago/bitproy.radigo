@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "322483511102",
+    "project_id": "radigo-9510c",
+    "storage_bucket": "radigo-9510c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322483511102:android:6778c0d7d120dac0f5566f",
+        "android_client_info": {
+          "package_name": "com.bitproy.radigo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "322483511102-9fl00qii7da22lmk0ga9qu5k0ujg9td7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi-yTsreH4BUtm6oKFXvaWAp7buKfZ83Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "322483511102-9fl00qii7da22lmk0ga9qu5k0ujg9td7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "322483511102-g9qt5bp8b49g3aj03mmkhp9u9kdu5eir.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bitproy.radigo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

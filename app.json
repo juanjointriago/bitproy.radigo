@@ -1,0 +1,93 @@
+{
+  "expo": {
+    "name": "RadiGo",
+    "slug": "appradigo",
+    "version": "0.1.9",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#F2BC23"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/favicon.png",
+          "color": "#ffffff"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow RadigoApp to use your location.",
+          "locationWhenInUsePermission": "Permite a $(PRODUCT_NAME) acceder a tu ubicación para que el cliente vea tu ubicación en tiempo real",
+          "locationAlwaysPermission": "Permite a $(PRODUCT_NAME) utilizar tu ubicacion todo el tiempo para seguridad de nuestros pasajeros",
+          "NSPhotoLibraryAddUsageDescription": "This app needs to access your gallery so you can select photos from the app. Please grant permission to use the camera and enjoy all the features of the app",
+          "NSPhotoLibraryUsageDescription": "This app needs to access your gallery so you can select photos from the app. Please grant permission to use the camera and enjoy all the features of the app",
+          "NSCameraUsageDescription": "This app needs to access your camera so that you can take photos from the app. Please grant permission to use the camera and enjoy all the features of the app",
+          "isIosBackgroundLocationEnabled": true
+        }
+      ]
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.purplewidget.radigo",
+      "buildNumber": "0.1.9",
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ],
+        "NSLocationAlwaysUsageDescription": "In order to provide you with a better user experience, this application needs to access your location. This information will be used to provide you with a more accurate and secure service Please grant permission to access your location and take full advantage of all app features",
+        "NSLocationUsageDescription": "In order to provide you with a better user experience, this application needs to access your location. This information will be used to provide you with a more accurate and secure service Please grant permission to access your location and take full advantage of all app features",
+        "NSLocationWhenInUseUsageDescription": "In order to provide you with a better user experience, this application needs to access your location. This information will be used to provide you with a more accurate and secure service Please grant permission to access your location and take full advantage of all app features",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "In order to provide you with a better user experience, this application needs to access your location. This information will be used to provide you with a more accurate and secure service Please grant permission to access your location and take full advantage of all app features",
+        "NSPhotoLibraryAddUsageDescription": "This app needs to access your gallery so you can select photos from the app. Please grant permission to use the camera and enjoy all the features of the app",
+        "NSPhotoLibraryUsageDescription": "This app needs to access your gallery so you can select photos from the app. Please grant permission to use the camera and enjoy all the features of the app",
+        "NSCameraUsageDescription": "This app needs to access your camera so that you can take photos from the app. Please grant permission to use the camera and enjoy all the features of the app",
+        "NSDocumentsFolderUsageDescription": "Help us select a document you need help with"
+      },
+      "config": {
+        "googleMapsApiKey": "AIzaSyAGJmE7Oge0Urb5bBU-CIIGB49jOKhNFoA"
+      }
+    },
+    "android": {
+      "googleServicesFile": "./google-services.json",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.CAMERA",
+        "android.permission.CAMERA_ROLL"
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAGJmE7Oge0Urb5bBU-CIIGB49jOKhNFoA"
+        }
+      },
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.bitproy.radigo"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "googleApi": "AIzaSyAGJmE7Oge0Urb5bBU-CIIGB49jOKhNFoA",
+      "eas": {
+        "projectId": "cb6d7662-7c1d-4fe9-be80-891807bd0267"
+      }
+    },
+    "scheme": "com.bitproy.radigo",
+    "owner": "bitproy"
+  }
+}
