@@ -1,6 +1,6 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { useCallback, useEffect, useRef, useState, useContext } from 'react'
-import BottomSheet from '@gorhom/bottom-sheet'
+import {BottomSheetModal} from '@gorhom/bottom-sheet'
 import { PRIMARY_COLOR } from '../../../theme/globalStyles';
 import { TravelContext } from '../../../contexts/Travel/TravelContext';
 
@@ -11,7 +11,7 @@ const ModalClientNavigation = ({
     snapPoints,
     children,
 }: any) => {
-    const bottomSheetRef = useRef<BottomSheet>(null)
+    const bottomSheetRef = useRef<BottomSheetModal>(null)
     const [statusOpenModal, setStatusOpenModal] = useState(false)
     const { dataTravelContext } = useContext(TravelContext)
 
@@ -64,29 +64,33 @@ const ModalClientNavigation = ({
 
     return (
         <>
-            <BottomSheet
+            <BottomSheetModal
                 handleComponent={CustomHandleComponent}
-                backgroundStyle={{
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
-                    borderTopColor: '#CFCFCF',
-                    borderEndColor: '#CFCFCF',
-                    borderStartColor: '#CFCFCF',
-                    borderTopWidth: 1,
-                    borderEndWidth: 0.5,
-                    borderStartWidth: 0.5,
-                    backgroundColor: 'white',
-                }}
+                backgroundStyle={styles.modalContainer}
                 ref={bottomSheetRef}
                 index={1}
                 snapPoints={snapPoints}
                 onChange={handleSheetChanges}
             >
                 {children}
-            </BottomSheet>
+            </BottomSheetModal>
         </>
     )
 }
 
+const styles = StyleSheet.create({
+    
+    modalContainer:{
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        borderTopColor: '#CFCFCF',
+        borderEndColor: '#CFCFCF',
+        borderStartColor: '#CFCFCF',
+        borderTopWidth: 1,
+        borderEndWidth: 0.5,
+        borderStartWidth: 0.5,
+        backgroundColor: 'white',
+    }
+})
 
 export default ModalClientNavigation

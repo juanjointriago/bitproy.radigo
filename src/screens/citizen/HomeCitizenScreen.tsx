@@ -5,7 +5,7 @@ import {
   ScrollView,
   RefreshControl,
 } from 'react-native'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 import { DrawerActions, useNavigation } from '@react-navigation/native'
 import { API_HOST_IMG } from '../../service/helpers/constants'
@@ -384,20 +384,20 @@ export const HomeCitizenScreen = () => {
               }
             }}
             stateTypeTravel={stateTypeTravel}
-            snapPoints={[100, '50%', '100%']}
+            snapPoints={useMemo(()=>[100, '50%', '100%'],[])}
             state={showBottomSheetModaNewrequest}
             close={(res) => setShowBottomSheetModalNewRequest(res)}
           />
         ) : (
           <ModalClientNavigation
-            snapPoints={[
+            snapPoints={useMemo(()=>[
               140,
               dataTravelContext.dataTravel.status_id === 3
                 ? '90%'
                 : dataTravelContext.dataTravel.status_id === 6
                 ? '90%'
                 : '50%',
-            ]}
+            ],[])}
             state={showBottomSheetModaNewrequest}
             close={setShowBottomSheetModalNewRequest}
           >
