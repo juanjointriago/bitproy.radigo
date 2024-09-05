@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, AppState } from 'react-native'
+import { StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { PermissionsProvider } from './src/contexts/LocationPermissions/PermissionsLocationContext'
 import useFont from './src/service/hooks/useFont'

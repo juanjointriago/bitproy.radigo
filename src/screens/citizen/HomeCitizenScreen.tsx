@@ -659,7 +659,7 @@ export const HomeCitizenScreen = () => {
                     </View>
                   )
               }
-            })()}
+            })}
           </ModalClientNavigation>
         )}
         <ModalSos

@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useEffect } from 'react'
+import { createContext, useReducer, useEffect } from 'react'
 import { AuthState, authReducer } from './authReducer'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }: any) => {
   const [state, dispatch] = useReducer(authReducer, authInicialState)
 
   useEffect(() => {
-    checkToken()
+    checkToken();
   }, [])
 
   const checkToken = async () => {

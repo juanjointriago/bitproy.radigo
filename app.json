@@ -2,7 +2,7 @@
   "expo": {
     "name": "RadiGo",
     "slug": "appradigo",
-    "version": "0.1.9",
+    "version": "0.73.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -37,8 +37,8 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.purplewidget.radigo",
-      "buildNumber": "0.1.9",
+      "bundleIdentifier": "com.bitproy.radigo",
+      "buildNumber": "31",
       "infoPlist": {
         "UIBackgroundModes": [
           "location",
@@ -58,6 +58,7 @@
       }
     },
     "android": {
+      "versionCode": 31,
       "googleServicesFile": "./google-services.json",
       "permissions": [
         "android.permission.ACCESS_COARSE_LOCATION",

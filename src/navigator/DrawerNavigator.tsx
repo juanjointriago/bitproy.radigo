@@ -60,7 +60,7 @@ const CustomDrawerContent = ({ navigation }: DrawerContentComponentProps) => {
     return () => {
       if (intervalValue) clearInterval(intervalValue);
     }
-  }, [])
+  }, [AppState.currentState]);
 
 
 

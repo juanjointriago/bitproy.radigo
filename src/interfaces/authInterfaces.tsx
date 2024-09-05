@@ -54,7 +54,7 @@ export interface User {
   created_at?: string;
   lat?:number,
   lng?:number,
-  uid?:string,
+  // uid?:string,
 }
 
 

@@ -78,8 +78,7 @@ const ModalClientNavigation = ({
                     backgroundColor: 'white',
                 }}
                 ref={bottomSheetRef}
-                index={0}
-                // index={1}
+                index={1}
                 snapPoints={snapPoints}
                 onChange={handleSheetChanges}
             >

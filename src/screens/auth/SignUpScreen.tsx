@@ -148,7 +148,7 @@ const SignUpScreen = ({ navigation }: Props) => {
     formData.append('number_account', form.numberAccount)
     formData.append('email_owner', form.emailAccountBank)
     formData.append('identification_owner', form.idUserAccount)
-    formData.append('uid', uniqueDeviceId)
+    // formData.append('uid', uniqueDeviceId)
     setLoading(true)
 
     let response:any = await signUp(formData)
@@ -157,7 +157,7 @@ const SignUpScreen = ({ navigation }: Props) => {
       console.log("❤❤❤",response.data.id)
        socket?.emit('new-user', {
         id:response.data.id,
-        uid:uniqueDeviceId,
+        // uid:uniqueDeviceId,
       }) 
 
       let alert = await confirmAlert(response.msg, 'SUCCESS')
