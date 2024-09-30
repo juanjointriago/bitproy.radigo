@@ -19,7 +19,6 @@ import * as Notifications from 'expo-notifications';
 import { BackgroundProvider } from './src/contexts/Background/BackgroundProvider'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
-const LOCATION_TRACKING = 'background-location'
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
