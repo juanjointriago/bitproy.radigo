@@ -6,7 +6,7 @@ import React, {
   useState,
   useContext,
 } from 'react'
-import BottomSheet from '@gorhom/bottom-sheet'
+import {BottomSheetModal} from '@gorhom/bottom-sheet'
 import { PRIMARY_COLOR } from '../../../theme/globalStyles'
 import { TravelContext } from '../../../contexts/Travel/TravelContext'
 import { AntDesign } from '@expo/vector-icons'
@@ -28,7 +28,7 @@ const ModalDriverNavigation = ({
   statusOnBoard,
   openModalDescriptionTravel,
 }: Props) => {
-  const bottomSheetRef = useRef<BottomSheet>(null)
+  const bottomSheetRef = useRef<BottomSheetModal>(null)
   const [statusOpenModal, setStatusOpenModal] = useState(false)
   const { dataTravelContext } = useContext(TravelContext)
 
@@ -105,7 +105,7 @@ const ModalDriverNavigation = ({
 
   return (
     <>
-      <BottomSheet
+      <BottomSheetModal
         handleComponent={CustomHandleComponent}
         backgroundStyle={{
           borderTopLeftRadius: 10,
@@ -124,7 +124,7 @@ const ModalDriverNavigation = ({
         onChange={handleSheetChanges}
       >
         {children}
-      </BottomSheet>
+      </BottomSheetModal>
     </>
   )
 }

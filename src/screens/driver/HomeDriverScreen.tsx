@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from 'react'
+import React, { useState, useRef, useEffect, useContext, useMemo } from 'react'
 import {
   View,
   FlatList,
@@ -681,9 +681,9 @@ export const HomeDriverScreen = ({ navigation }: Props) => {
           dataTravels={dataTravels}
           selectTravel={selectTravel}
           snapPoints={
-            user?.is_available === false
-              ? [100, 110]
-              : [100, modalInit === 'loadTravels' ? '90%' : '45%']
+            useMemo(()=>user?.is_available === false
+            ? [100, 110]
+            : [100, modalInit === 'loadTravels' ? '90%' : '45%'],[])
           }
           state={showBottomSheetModaNewrequest}
           close={setShowBottomSheetModalNewRequest}
@@ -849,10 +849,10 @@ export const HomeDriverScreen = ({ navigation }: Props) => {
             setOpenModalDescription(true)
           }}
           statusOnBoard={onBoard}
-          snapPoints={[
+          snapPoints={useMemo(()=>[
             140,
             dataTravelContext.dataTravel.status_id === 6 ? '90%' : '40%',
-          ]}
+          ], [])}
           state={showBottomSheetModaNewrequest}
           close={setShowBottomSheetModalNewRequest}
         >
