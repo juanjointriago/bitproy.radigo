@@ -1,8 +1,6 @@
-import React from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   ViewStyle,
   ActivityIndicator,
 } from "react-native";
@@ -12,7 +10,8 @@ import {
   PRIMARY_COLOR,
   SECONDARY_COLOR,
 } from "../../theme/globalStyles";
-import { TextStyle } from 'react-native';
+import { TextStyle, TouchableOpacity } from 'react-native';
+// import { TouchableOpacity } from "@gorhom/bottom-sheet";
 
 interface Props {
   title: string;

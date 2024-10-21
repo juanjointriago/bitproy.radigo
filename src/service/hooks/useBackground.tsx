@@ -2,8 +2,8 @@ import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager"
 import { useAlerts } from "./useAlerts";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { InterfaceTravelById } from "../../interfaces/ITravel";
-import * as BackgroundFetch from 'expo-background-fetch';
+// import { InterfaceTravelById } from "../../interfaces/ITravel";
+// import * as BackgroundFetch from 'expo-background-fetch';
 
 const LOCATION_TRACKING = "background-location";
 

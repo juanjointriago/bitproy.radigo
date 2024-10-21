@@ -83,21 +83,26 @@ export const TravelProvider = ({ children }: any) => {
   }, [])
 
   const init = async () => {
-    const resp = await AsyncStorage.getItem('travelStorage')
+    const resp = await AsyncStorage.getItem('travelStorage');
     if (!resp) return
     const objResp: InterfaceTravelById = JSON.parse(resp)
 
     if (user?.role_id === 3) {
       if (objResp.id === 0){
-        return removeTravel()
+        return await removeTravel()
       }
     }
     //regresa al estado para poder calificar
     if (objResp.status_id === 0) return
-    changeTravel(objResp)
+    await changeTravel(objResp)
     
     if (objResp.status_id === 6) {
-      return changeTravel(objResp)
+      return await changeTravel(objResp)
+    }
+    try {
+      
+    } catch (error) {
+      
     }
     getTravelbyID(objResp.id)
       .then((res) => {
@@ -131,6 +136,7 @@ export const TravelProvider = ({ children }: any) => {
   }
 
   const changeTravel = async (data: InterfaceTravelById) => {
+    console.debug('👀 changeTravel =>', {data})
     dispatch({
       type: 'changeTravel',
       payload: { dataTravel: data },

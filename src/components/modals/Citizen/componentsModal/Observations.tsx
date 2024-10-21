@@ -1,9 +1,6 @@
 import { View, Text } from 'react-native'
-import React, { useState } from 'react'
 import { globalStyles } from '../../../../theme/globalStyles'
 import StarsCalifications from '../../../other/StarsCalifications'
-import { InputTextArea } from '../../../input/InputTextArea'
-import BtnPrimary from '../../../buttons/BtnPrimary'
 
 interface Props {
   calification: (rating: number) => void;

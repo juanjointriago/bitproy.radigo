@@ -1,15 +1,16 @@
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native'
-import React, {
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import {
   useCallback,
   useEffect,
   useRef,
   useState,
   useContext,
+  useMemo,
 } from 'react'
-import {BottomSheetModal} from '@gorhom/bottom-sheet'
-import { PRIMARY_COLOR } from '../../../theme/globalStyles'
-import { TravelContext } from '../../../contexts/Travel/TravelContext'
-import { AntDesign } from '@expo/vector-icons'
+import BottomSheetModal from '@gorhom/bottom-sheet';
+import { PRIMARY_COLOR } from '../../../theme/globalStyles';
+import { TravelContext } from '../../../contexts/Travel/TravelContext';
+import { AntDesign } from '@expo/vector-icons';
 
 interface Props {
   openModalDescriptionTravel: () => void
@@ -30,7 +31,8 @@ const ModalDriverNavigation = ({
 }: Props) => {
   const bottomSheetRef = useRef<BottomSheetModal>(null)
   const [statusOpenModal, setStatusOpenModal] = useState(false)
-  const { dataTravelContext } = useContext(TravelContext)
+  const { dataTravelContext } = useContext(TravelContext);
+  const refIndex = useRef(1);
 
   useEffect(() => {
     handleSheetChanges(state)
@@ -104,7 +106,6 @@ const ModalDriverNavigation = ({
   )
 
   return (
-    <>
       <BottomSheetModal
         handleComponent={CustomHandleComponent}
         backgroundStyle={{
@@ -119,13 +120,12 @@ const ModalDriverNavigation = ({
           backgroundColor: 'white',
         }}
         ref={bottomSheetRef}
-        index={1}
-        snapPoints={snapPoints}
+        // index={refIndex.current}
+        snapPoints={useMemo(() => [...snapPoints], [snapPoints])}
         onChange={handleSheetChanges}
       >
         {children}
       </BottomSheetModal>
-    </>
   )
 }
 

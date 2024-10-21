@@ -11,9 +11,9 @@ import { GOOGLE_API_KEY } from "../../service/helpers/constants";
 import { Dimensions } from "react-native";
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { SocketContext } from "../../contexts/sockets/SocketContext";
-import { calculateDistanceKm } from "../../service/helpers/geocoder";
-import haversine from "haversine";
-import axios from "axios";
+// import { calculateDistanceKm } from "../../service/helpers/geocoder";
+// import haversine from "haversine";
+// import axios from "axios";
 import useTravel from "../../service/hooks/useTravel";
 import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../theme/globalStyles";
 

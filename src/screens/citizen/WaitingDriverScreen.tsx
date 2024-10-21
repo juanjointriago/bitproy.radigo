@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext, useState } from 'react'
+import { useEffect, useRef, useContext, useState, useCallback } from 'react'
 import {
   View,
   Animated,
@@ -8,18 +8,15 @@ import {
   RefreshControl,
   ScrollView,
 } from 'react-native'
-import { PRIMARY_COLOR, globalStyles } from '../../theme/globalStyles'
+import { globalStyles } from '../../theme/globalStyles'
 import BtnPrimary from '../../components/buttons/BtnPrimary'
 import { TravelContext } from '../../contexts/Travel/TravelContext'
 import useTravel from '../../service/hooks/useTravel'
-import { AuthContext } from '../../contexts/Auth/AuthContext'
 import { StackScreenProps } from '@react-navigation/stack'
 import { InterfaceTravelById } from '../../interfaces/ITravel'
-import { CommonActions } from '@react-navigation/native'
 import { useAlerts } from '../../service/hooks/useAlerts'
 import { SocketContext } from '../../contexts/sockets/SocketContext'
 import { ModalLoading } from '../../components/modals/ModalLoading'
-import { TouchableOpacity } from 'react-native'
 interface Props extends StackScreenProps<any, any> {}
 
 const WaitingDriverScreen = ({ navigation, route }: Props) => {
@@ -28,7 +25,7 @@ const WaitingDriverScreen = ({ navigation, route }: Props) => {
   const { dataTravelContext, removeTravel, changeTravel, init } = useContext(
     TravelContext,
   )
-  const { confirmAlert, showAlert, toast } = useAlerts()
+  const { toast } = useAlerts()
   const { socket } = useContext(SocketContext)
 
   const [loading, setLoading] = useState(false)
@@ -41,9 +38,9 @@ const WaitingDriverScreen = ({ navigation, route }: Props) => {
   const dot2Scale = useRef(new Animated.Value(0)).current
   const dot3Scale = useRef(new Animated.Value(0)).current
 
-  const [refreshing, setRefreshing] = React.useState(false)
+  const [refreshing, setRefreshing] = useState(false)
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true)
     init()
     setTimeout(() => {

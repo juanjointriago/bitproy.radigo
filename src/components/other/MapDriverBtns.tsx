@@ -366,7 +366,7 @@ const MapDriverBtns = ({
                     android: `${scheme}${latLng}(${label})`,
                   })
 
-                  Linking.openURL(url)
+                  Linking.openURL(url!)
                 }
               }}
               styleBtn={{ height: 45, width: 45, marginTop: 20 }}

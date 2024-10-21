@@ -1,8 +1,7 @@
-import React, { useEffect, useState,useContext } from 'react';
-import { ActivityIndicator, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Ionicons, Entypo, AntDesign } from '@expo/vector-icons';
+import { useEffect, useState,useContext } from 'react';
+import { Modal, StyleSheet, Text, View } from 'react-native';
 import { TravelContext } from '../../contexts/Travel/TravelContext';
-import { PRIMARY_COLOR, globalStyles } from '../../theme/globalStyles';
+import { PRIMARY_COLOR } from '../../theme/globalStyles';
 import BtnPrimary from '../buttons/BtnPrimary';
 interface Props {
     visible: boolean;
@@ -26,7 +25,7 @@ export const ModalArrivedDriver = ({ visible }: Props) => {
         <Modal
             animationType="slide"
             visible={isVisible}
-            transparent
+            // transparent
         // onRequestClose={() => {alert("Modal has been closed.")}}
         >
             <View style={{ backgroundColor: 'rgba(247,247,247,0.4)', flex: 1,  justifyContent: 'center', alignItems: 'center' }}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useContext } from 'react';
+import  { useEffect, useState,useContext, Fragment } from 'react';
 import { ActivityIndicator, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons, Entypo, AntDesign } from '@expo/vector-icons';
 import { TravelContext } from '../../contexts/Travel/TravelContext';
@@ -26,7 +26,8 @@ export const ModalDescription = ({ visible }: Props) => {
         <Modal
             animationType="slide"
             visible={isVisible}
-            transparent
+            // transparent
+            // style={{ flex: 1, backgroundColor: 'red' }}
         // onRequestClose={() => {alert("Modal has been closed.")}}
         >
             <View style={{ backgroundColor: 'rgba(247,247,247,0.4)', flex: 1,  justifyContent: 'center', alignItems: 'center' }}>
@@ -42,7 +43,7 @@ export const ModalDescription = ({ visible }: Props) => {
                       <Text style={{...globalStyles.Text}}>{dataTravelContext?.dataTravel.reference}</Text>
 
                         {dataTravelContext.dataTravel.type_service_id === 2 &&
-                        <>
+                        <Fragment>
                         
                       <Text style={{textAlign: 'center',fontWeight:'bold', fontSize:18}}> Descripción de la orden: </Text>
                       <Text style={{...globalStyles.Text}}> {dataTravelContext?.dataTravel.order_description}</Text>
@@ -50,7 +51,7 @@ export const ModalDescription = ({ visible }: Props) => {
                       <Text style={{textAlign: 'center',fontWeight:'bold', fontSize:18}}>  Lugar de Entrega:</Text>
                       
                       <Text style={{...globalStyles.Text,textAlign: 'center'}}> {dataTravelContext?.dataTravel.address_end} </Text>
-                        </>
+                        </Fragment>
 
                         }
 

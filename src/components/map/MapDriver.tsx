@@ -2,17 +2,17 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
+  // TouchableOpacity,
   Image,
   Dimensions,
-  AppState,
+  // AppState,
 } from 'react-native'
 import React, { useContext, useEffect, useState, useRef } from 'react'
 import MapView, {
   Callout,
   LatLng,
   Marker,
-  PROVIDER_GOOGLE,
+  // PROVIDER_GOOGLE,
 } from 'react-native-maps'
 import * as Location from 'expo-location'
 import MapDriverBtns from '../other/MapDriverBtns'
@@ -23,17 +23,17 @@ import {
   API_HOST_IMG,
   GOOGLE_API_KEY,
 } from '../../service/helpers/constants'
-import { PRIMARY_COLOR } from '../../theme/globalStyles'
+// import { PRIMARY_COLOR } from '../../theme/globalStyles'
 import { Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { InterfaceTravelById, TravelByDriver } from '../../interfaces/ITravel'
-import { SocketContext } from '../../contexts/sockets/SocketContext'
+// import { SocketContext } from '../../contexts/sockets/SocketContext'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { calculateDistanceKm } from '../../service/helpers/geocoder'
 import { useAlerts } from '../../service/hooks/useAlerts'
 import { io } from 'socket.io-client'
 import { AuthContext } from '../../contexts/Auth/AuthContext'
 import haversine from 'haversine'
-import { useSocket } from '../../service/hooks/useSockets'
+// import { useSocket } from '../../service/hooks/useSockets'
 
 interface Props {
   btnLoadTravels: () => void
@@ -68,7 +68,7 @@ export const MapDriver = ({
   const { dataTravelContext } = useContext(TravelContext)
   const { token } = useContext(AuthContext)
   const { toast } = useAlerts()
-  const { conectarSocket } = useSocket(API_HOST)
+  // const { conectarSocket } = useSocket(API_HOST)
   const [stateNavigation, setStateNavigation] = useState(false)
   const [userLocation, setUserLocation] = useState<LatLng>({
     longitude: 0,

@@ -17,7 +17,7 @@ import LogoContainer from "../components/ContainerLogo/LogoContainer";
 import TextLogOut from "../components/Text/TextLogOut";
 import { globalStyles } from "../theme/globalStyles";
 import { AuthContext } from "../contexts/Auth/AuthContext";
-import { useContext, useEffect } from "react";
+import { Fragment, useContext, useEffect } from "react";
 import {
   // API_HOST,
   API_HOST_IMG
@@ -69,7 +69,7 @@ const CustomDrawerContent = ({ navigation }: DrawerContentComponentProps) => {
     navigation.toggleDrawer();
   };
   return (
-    <>
+    <Fragment>
       <UserInfo
         img={`${API_HOST_IMG}/profile/${user?.photo}`}
         name={user?.full_name}
@@ -110,7 +110,7 @@ const CustomDrawerContent = ({ navigation }: DrawerContentComponentProps) => {
           </View>
         </ScrollView>
       </View>
-    </>
+    </Fragment>
   );
 };
 

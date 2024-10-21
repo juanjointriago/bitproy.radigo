@@ -2,76 +2,62 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Platform,
   Dimensions,
-  ScrollView,
-} from 'react-native'
+  Modal,
+} from "react-native";
 import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
-} from 'react'
-import BottomSheet from '@gorhom/bottom-sheet'
-import { Ionicons, MaterialIcons } from '@expo/vector-icons'
+} from "react";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import {
   GooglePlaceData,
   GooglePlaceDetail,
-} from 'react-native-google-places-autocomplete'
-import TextModal from '../../Text/TextModal'
-import BtnPrimary from '../../buttons/BtnPrimary'
+} from "react-native-google-places-autocomplete";
+import TextModal from "../../Text/TextModal";
 import {
   ALERT,
-  BCBUTTON,
   INPUT1,
   INPUT2,
   PRIMARY_COLOR,
-  SECONDARY_COLOR,
-  TEXT,
   globalStyles,
-} from '../../../theme/globalStyles'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { Autocompleted } from '../../map/inputAddress/Autocompleted'
-import CheckboxBtn from '../../check/CheckboxBtn'
-import { FontAwesome } from '@expo/vector-icons'
-import { Fontisto } from '@expo/vector-icons'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { InputText } from '../../input/InputText'
-import { useForm } from '../../../service/hooks/useForm'
-import { useAlerts } from '../../../service/hooks/useAlerts'
-import { ErrorMessage } from '../../../components/other/ErrorMessage'
-import {
-  DataTravel,
-  INewTravel,
-  InterfaceTravelById,
-  PostTravelResponse,
-} from '../../../interfaces/ITravel'
-import useTravel from '../../../service/hooks/useTravel'
-import { CommonActions, useNavigation } from '@react-navigation/native'
-import { InputArea } from '../../input/InputArea'
-import { StackScreenProps } from '@react-navigation/stack'
-import { LatLng } from 'react-native-maps'
-import { SocketContext } from '../../../contexts/sockets/SocketContext'
-import { TravelContext } from '../../../contexts/Travel/TravelContext'
-import { AuthContext } from '../../../contexts/Auth/AuthContext'
-import { Text } from 'react-native'
-import { ModalLoading } from '../ModalLoading'
-import Geocoder from 'react-native-geocoding'
-import * as Location from 'expo-location'
-import { GOOGLE_API_KEY } from '../../../service/helpers/constants'
-import { SimpleLineIcons } from '@expo/vector-icons'
-import DeviceInfo from 'react-native-device-info';
+} from "../../../theme/globalStyles";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Autocompleted } from "../../map/inputAddress/Autocompleted";
+import CheckboxBtn from "../../check/CheckboxBtn";
+import { FontAwesome } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { InputText } from "../../input/InputText";
+import { useForm } from "../../../service/hooks/useForm";
+import { useAlerts } from "../../../service/hooks/useAlerts";
+import { ErrorMessage } from "../../../components/other/ErrorMessage";
+import { INewTravel, InterfaceTravelById } from "../../../interfaces/ITravel";
+import useTravel from "../../../service/hooks/useTravel";
+import { InputArea } from "../../input/InputArea";
+import { SocketContext } from "../../../contexts/sockets/SocketContext";
+import { TravelContext } from "../../../contexts/Travel/TravelContext";
+import { AuthContext } from "../../../contexts/Auth/AuthContext";
+import { Text } from "react-native";
+import { ModalLoading } from "../ModalLoading";
+import Geocoder from "react-native-geocoding";
+import { GOOGLE_API_KEY } from "../../../service/helpers/constants";
+import { SimpleLineIcons } from "@expo/vector-icons";
+// import DeviceInfo from "react-native-device-info";
 
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window')
+const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 interface Props {
-  state: any
-  close: (res: number) => void
-  snapPoints: any
-  stateTypeTravel: boolean
-  updateStateTravelModal: (status: boolean) => void
-  updateLocationUserFunc: () => void
+  state: any;
+  close: (res: number) => void;
+  snapPoints: any;
+  stateTypeTravel: boolean;
+  updateStateTravelModal: (status: boolean) => void;
+  updateLocationUserFunc: () => void;
 }
 const ModalCreateRequest = ({
   state,
@@ -81,21 +67,20 @@ const ModalCreateRequest = ({
   updateStateTravelModal,
   updateLocationUserFunc,
 }: Props) => {
-  Geocoder.init(GOOGLE_API_KEY)
+  Geocoder.init(GOOGLE_API_KEY);
 
-  const bottomSheetRef = useRef<BottomSheet>(null)
-  const { socket } = useContext(SocketContext)
-  const { changeTravel, dataTravelContext, removeTravel } = useContext(
-    TravelContext,
-  )
-  const { user } = useContext(AuthContext)
-  const { confirmAlert, showAlert, toast } = useAlerts()
-  const { postTravel, getCostTravel } = useTravel()
-  const [currentPage, setCurrentPage] = React.useState<number>(1)
-  const [loading, setLoading] = useState(false)
-  const [statusOpenModal, setStatusOpenModal] = useState(false)
-  const [statusCompleted, setStatusCompleted] = useState(false)
-  const [statusCompleted2, setStatusCompleted2] = useState(false)
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const { socket } = useContext(SocketContext);
+  const { changeTravel, dataTravelContext, removeTravel } =
+    useContext(TravelContext);
+  const { user } = useContext(AuthContext);
+  const { confirmAlert, showAlert, toast } = useAlerts();
+  const { postTravel, getCostTravel } = useTravel();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [loading, setLoading] = useState(false);
+  const [statusOpenModal, setStatusOpenModal] = useState(false);
+  const [statusCompleted, setStatusCompleted] = useState(false);
+  const [statusCompleted2, setStatusCompleted2] = useState(false);
 
   const {
     type_service_id,
@@ -112,56 +97,54 @@ const ModalCreateRequest = ({
   } = useForm({
     type_service_id: 1,
     time: 5,
-    order_description: '',
+    order_description: "",
     price: 10,
     distance: 50,
-    number_house: '',
-    reference: '',
+    number_house: "",
+    reference: "",
     extras: [],
-  })
+  });
 
   const [errors, setErrors] = useState({
     order_description: false,
     reference: false,
-  })
+  });
 
-  const [selectedExtras, setSelectedExtras] = useState([])
+  const [selectedExtras, setSelectedExtras] = useState([]);
 
   const handleExtrasChange = (value: any, name: any) => {
-    setSelectedExtras(value)
-    onChange(value, name)
-  }
+    setSelectedExtras(value);
+    onChange(value, name);
+  };
 
   const handleGoBack = () => {
-    setCurrentPage(currentPage - 1)
+    setCurrentPage(currentPage - 1);
     if (currentPage === 2) {
       changeTravel({
         ...dataTravelContext.dataTravel,
         lat_end: 0,
         lng_end: 0,
-        address_end: '',
-      })
+        address_end: "",
+      });
     }
-  }
+  };
 
   useEffect(() => {
-    handleSheetChanges(state)
-  }, [state])
+    handleSheetChanges(state);
+  }, [state]);
 
   const handleTravel = async () => {
-    setLoading(true)
+    setLoading(true);
 
     const dataTravelCostTravel = {
       time: parseInt(dataTravelContext.dataTravel.time.toFixed()),
       distance: parseInt(dataTravelContext.dataTravel.distance.toFixed()),
-    }
+    };
 
     const dataPriceTravel = await getCostTravel(
       dataTravelCostTravel.distance,
-      dataTravelCostTravel.time,
-    )
-    const uniqueDeviceId = await DeviceInfo.getUniqueId();
-
+      dataTravelCostTravel.time
+    );
 
     const data: INewTravel = {
       type_service_id: !stateTypeTravel ? 1 : 2,
@@ -178,10 +161,10 @@ const ModalCreateRequest = ({
       lng_end: dataTravelContext.dataTravel.lng_end,
       lat_end: dataTravelContext.dataTravel.lat_end,
       extras: form.extras,
-    }
+    };
     postTravel(data)
       .then(async (res) => {
-        setLoading(false)
+        setLoading(false);
         const data: InterfaceTravelById = {
           id: res.data.id,
           // uid: uniqueDeviceId,
@@ -201,48 +184,48 @@ const ModalCreateRequest = ({
             photo: user!.photo!,
             stars: 0,
           },
-          driver: { full_name: '', id: 0, phone: '', photo: '', stars: 0 },
+          driver: { full_name: "", id: 0, phone: "", photo: "", stars: 0 },
           type_service_id: res.data.type_service_id,
           address_end: res.data.address_end,
           address_user: res.data.address_user,
           order_description: res.data.order_description,
           number_house: res.data.number_house.toString(),
           reference: res.data.reference,
-          car: { color: '', id: 0, model: '', plate: 0 },
-        }
-        toast(res.msg, 'SUCCESS')
-        changeTravel(data)
-        socket.emit('new-travel', { idTravel: res.data.id,  times:1 })
+          car: { color: "", id: 0, model: "", plate: 0 },
+        };
+        toast(res.msg, "SUCCESS");
+        changeTravel(data);
+        socket.emit("new-travel", { idTravel: res.data.id, times: 1 });
       })
       .catch(async (err: any) => {
-        setLoading(false)
-        toast(err?.response.data || 'Error, algo salio mal', 'DANGER')
-      })
-  }
+        setLoading(false);
+        toast(err?.response.data || "Error, algo salio mal", "DANGER");
+      });
+  };
 
   const handleSheetChanges = useCallback((index: number) => {
-    bottomSheetRef.current?.snapToIndex(index)
+    bottomSheetRef.current?.snapToIndex(index);
     if (index === 1) {
-      close(1)
-      setStatusOpenModal(false)
+      close(1);
+      setStatusOpenModal(false);
     } else {
-      setStatusOpenModal(true)
+      setStatusOpenModal(true);
     }
     if (index === 0) {
-      close(0)
+      close(0);
     }
-  }, [])
+  }, []);
 
   const CustomHandleComponent = () => (
     <TouchableOpacity
-      style={{ alignItems: 'center', justifyContent: 'center', height: 40 }}
+      style={{ alignItems: "center", justifyContent: "center", height: 40 }}
       onPress={() => {
-        statusOpenModal ? handleSheetChanges(1) : handleSheetChanges(0)
+        statusOpenModal ? handleSheetChanges(1) : handleSheetChanges(0);
       }}
     >
       <View
         style={{
-          backgroundColor: '#717171',
+          backgroundColor: "#717171",
           width: 90,
           height: 3,
           borderRadius: 5,
@@ -250,45 +233,70 @@ const ModalCreateRequest = ({
       ></View>
       <View
         style={{
-          borderBottomColor: '#717171',
+          borderBottomColor: "#717171",
           borderBottomWidth: 0.7,
-          width: '90%',
-          position: 'absolute',
+          width: "90%",
+          position: "absolute",
           bottom: 0,
         }}
       ></View>
     </TouchableOpacity>
-  )
+  );
 
   /*   console.log('statusCompleted', statusCompleted)
   console.log('statusCompleted2', statusCompleted2) */
 
   return (
     <>
-      <BottomSheet
+      {/* <BottomSheet
         handleComponent={CustomHandleComponent}
         backgroundStyle={{
+          flex:1,
           borderTopLeftRadius: 10,
           borderTopRightRadius: 10,
-          borderTopColor: '#CFCFCF',
-          borderEndColor: '#CFCFCF',
-          borderStartColor: '#CFCFCF',
+          borderTopColor: "#CFCFCF",
+          borderEndColor: "#CFCFCF",
+          borderStartColor: "#CFCFCF",
           borderTopWidth: 1,
           borderEndWidth: 0.5,
           borderStartWidth: 0.5,
-          backgroundColor: 'rgba(255, 255, 255, 0.95) ',
+          backgroundColor: "rgba(255, 255, 255, 0.95) ",
         }}
-        ref={bottomSheetRef}
         index={1}
-        snapPoints={snapPoints}
+        ref={bottomSheetRef}
+        snapPoints={useMemo(() => [...snapPoints], [snapPoints])}
         onChange={handleSheetChanges}
+      > */}
+      <Modal
+        style={{
+          flex: 1,
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+          borderTopColor: "#CFCFCF",
+          borderEndColor: "#CFCFCF",
+          borderStartColor: "#CFCFCF",
+          borderTopWidth: 1,
+          borderEndWidth: 0.5,
+          borderStartWidth: 0.5,
+          backgroundColor: "rgba(255, 255, 255, 0.95) ",
+        }}
+        animationType="slide"
+        visible={statusOpenModal}
+        onPointerDownCapture={(e) => {
+          console.debug("onPointerDownCapture", e);
+        }}
+        onPointerDown={(e) => {
+          console.debug("onPointerDown", e);
+        }}
       >
+        {/* <BottomSheetView style={{flex:1}}> */}
+        <CustomHandleComponent />
         <View
           style={{
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
+            width: "100%",
+            height: "auto",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <ModalLoading visible={loading} />
@@ -301,12 +309,12 @@ const ModalCreateRequest = ({
                     return (
                       <View
                         style={{
-                          width: '100%',
-                          height: '100%',
-                          alignItems: 'center',
+                          width: "100%",
+                          height: "100%",
+                          alignItems: "center",
                         }}
                       >
-                        <View style={{ width: '100%', height: 50 }}>
+                        <View style={{ width: "100%", height: 50 }}>
                           <TextModal
                             text="Selecciona tu servicio"
                             styleTitle={{
@@ -318,38 +326,41 @@ const ModalCreateRequest = ({
 
                         <View
                           style={{
-                            width: '90%',
-                            height: '100%',
+                            width: "90%",
+                            height: "100%",
                           }}
                         >
                           <TouchableOpacity
                             onPress={() => {
-                              stateTypeTravel && updateStateTravelModal(false)
-                              form.type_service_id = stateTypeTravel ? 2 : 1
-                              setCurrentPage(2)
+                              stateTypeTravel && updateStateTravelModal(false);
+                              form.type_service_id = stateTypeTravel ? 2 : 1;
+                              setCurrentPage(2);
                               changeTravel({
                                 ...dataTravelContext.dataTravel,
                                 type_service_id: 1,
-                              })
+                              });
                             }}
                             style={{
-                              width: '100%',
+                              width: "100%",
                               height: 60,
                               backgroundColor: stateTypeTravel
-                                ? '#C0D0EB'
+                                ? "#C0D0EB"
                                 : PRIMARY_COLOR,
                               borderRadius: 10,
-                              flexDirection: 'row',
+                              flexDirection: "row",
                               marginBottom: 10,
                             }}
                           >
                             <View
-                              style={{ width: '80%', justifyContent: 'center' }}
+                              style={{
+                                width: "80%",
+                                justifyContent: "center",
+                              }}
                             >
                               <Text
                                 style={{
                                   ...globalStyles.TitleSecondary,
-                                  color: '#444444',
+                                  color: "#444444",
                                   left: 15,
                                 }}
                               >
@@ -360,7 +371,7 @@ const ModalCreateRequest = ({
                                   left: 50,
                                   color: INPUT2,
                                   fontSize: 12,
-                                  fontFamily: 'PoppinsRegular',
+                                  fontFamily: "PoppinsRegular",
                                 }}
                               >
                                 Aproximadamente 2 min
@@ -370,8 +381,8 @@ const ModalCreateRequest = ({
                             <View
                               style={{
                                 flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center',
+                                justifyContent: "center",
+                                alignItems: "center",
                               }}
                             >
                               {stateTypeTravel ? undefined : (
@@ -386,31 +397,34 @@ const ModalCreateRequest = ({
 
                           <TouchableOpacity
                             onPress={() => {
-                              !stateTypeTravel && updateStateTravelModal(true)
-                              form.type_service_id = stateTypeTravel ? 2 : 1
-                              setCurrentPage(2)
+                              !stateTypeTravel && updateStateTravelModal(true);
+                              form.type_service_id = stateTypeTravel ? 2 : 1;
+                              setCurrentPage(2);
                               changeTravel({
                                 ...dataTravelContext.dataTravel,
                                 type_service_id: 2,
-                              })
+                              });
                             }}
                             style={{
-                              width: '100%',
+                              width: "100%",
                               height: 60,
                               backgroundColor: !stateTypeTravel
-                                ? '#C0D0EB'
+                                ? "#C0D0EB"
                                 : INPUT1,
                               borderRadius: 10,
-                              flexDirection: 'row',
+                              flexDirection: "row",
                             }}
                           >
                             <View
-                              style={{ width: '80%', justifyContent: 'center' }}
+                              style={{
+                                width: "80%",
+                                justifyContent: "center",
+                              }}
                             >
                               <Text
                                 style={{
                                   ...globalStyles.TitleSecondary,
-                                  color: '#444444',
+                                  color: "#444444",
                                   left: 15,
                                 }}
                               >
@@ -421,7 +435,7 @@ const ModalCreateRequest = ({
                                   left: 50,
                                   color: INPUT2,
                                   fontSize: 12,
-                                  fontFamily: 'PoppinsRegular',
+                                  fontFamily: "PoppinsRegular",
                                 }}
                               >
                                 Aproximadamente 2 min
@@ -431,8 +445,8 @@ const ModalCreateRequest = ({
                             <View
                               style={{
                                 flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center',
+                                justifyContent: "center",
+                                alignItems: "center",
                               }}
                             >
                               {!stateTypeTravel ? undefined : (
@@ -469,19 +483,19 @@ const ModalCreateRequest = ({
                           </View> */}
                         </View>
                       </View>
-                    )
+                    );
                   case 2:
                     return (
-                      <View style={{ height: '100%', width: '100%' }}>
+                      <View style={{ height: "100%", width: "100%" }}>
                         <TouchableOpacity
                           onPress={updateLocationUserFunc}
                           style={{
                             right: 20,
                             width: 40,
                             height: 60,
-                            position: 'absolute',
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                            position: "absolute",
+                            justifyContent: "center",
+                            alignItems: "center",
                             zIndex: 9999,
                           }}
                         >
@@ -501,7 +515,7 @@ const ModalCreateRequest = ({
                               }}
                             >
                               <TextModal
-                                text={'¿A donde lo entregamos?'}
+                                text={"¿A donde lo entregamos?"}
                                 styleTitle={{
                                   left: 20,
                                 }}
@@ -516,16 +530,16 @@ const ModalCreateRequest = ({
                                 }
                                 onpress={(
                                   data: GooglePlaceData,
-                                  detail: GooglePlaceDetail | null,
+                                  detail: GooglePlaceDetail | null
                                 ) => {
-                                  setStatusCompleted(true)
-                                  setStatusCompleted2(false)
+                                  setStatusCompleted(true);
+                                  setStatusCompleted2(false);
                                   changeTravel({
                                     ...dataTravelContext.dataTravel,
                                     address_user: data.description,
                                     lat_user: detail!.geometry.location.lat,
                                     lng_user: detail!.geometry.location.lng,
-                                  })
+                                  });
                                 }}
                               />
                             </View>
@@ -539,8 +553,8 @@ const ModalCreateRequest = ({
                               <TextModal
                                 text={
                                   stateTypeTravel
-                                    ? '¿Dónde recogemos tu pedido? '
-                                    : '¿Dónde estas?'
+                                    ? "¿Dónde recogemos tu pedido? "
+                                    : "¿Dónde estas?"
                                 }
                                 styleTitle={{
                                   left: 20,
@@ -555,16 +569,16 @@ const ModalCreateRequest = ({
                                 }
                                 onpress={(
                                   data: GooglePlaceData,
-                                  detail: GooglePlaceDetail | null,
+                                  detail: GooglePlaceDetail | null
                                 ) => {
-                                  setStatusCompleted2(true)
-                                  setStatusCompleted(false)
+                                  setStatusCompleted2(true);
+                                  setStatusCompleted(false);
                                   changeTravel({
                                     ...dataTravelContext.dataTravel,
                                     address_end: data.description,
                                     lat_end: detail!.geometry.location.lat,
                                     lng_end: detail!.geometry.location.lng,
-                                  })
+                                  });
                                 }}
                               />
                             </View>
@@ -579,7 +593,7 @@ const ModalCreateRequest = ({
                               }}
                             >
                               <TextModal
-                                text={'¿Dónde estas?'}
+                                text={"¿Dónde estas?"}
                                 styleTitle={{
                                   left: 20,
                                 }}
@@ -593,16 +607,16 @@ const ModalCreateRequest = ({
                                 }
                                 onpress={(
                                   data: GooglePlaceData,
-                                  detail: GooglePlaceDetail | null,
+                                  detail: GooglePlaceDetail | null
                                 ) => {
-                                  setStatusCompleted(true)
-                                  setStatusCompleted2(false)
+                                  setStatusCompleted(true);
+                                  setStatusCompleted2(false);
                                   changeTravel({
                                     ...dataTravelContext.dataTravel,
                                     address_user: data.description,
                                     lat_user: detail!.geometry.location.lat,
                                     lng_user: detail!.geometry.location.lng,
-                                  })
+                                  });
                                 }}
                               />
                             </View>
@@ -616,8 +630,8 @@ const ModalCreateRequest = ({
                               <TextModal
                                 text={
                                   stateTypeTravel
-                                    ? '¿A donde lo entregamos?'
-                                    : '¿Dónde viajas? (opcional)'
+                                    ? "¿A donde lo entregamos?"
+                                    : "¿Dónde viajas? (opcional)"
                                 }
                                 styleTitle={{
                                   left: 20,
@@ -633,16 +647,16 @@ const ModalCreateRequest = ({
                                 }
                                 onpress={(
                                   data: GooglePlaceData,
-                                  detail: GooglePlaceDetail | null,
+                                  detail: GooglePlaceDetail | null
                                 ) => {
-                                  setStatusCompleted2(true)
-                                  setStatusCompleted(false)
+                                  setStatusCompleted2(true);
+                                  setStatusCompleted(false);
                                   changeTravel({
                                     ...dataTravelContext.dataTravel,
                                     address_end: data.description,
                                     lat_end: detail!.geometry.location.lat,
                                     lng_end: detail!.geometry.location.lng,
-                                  })
+                                  });
                                 }}
                               />
                             </View>
@@ -650,38 +664,38 @@ const ModalCreateRequest = ({
                         )}
                         <View
                           style={{
-                            alignItems: 'center',
-                            position: 'absolute',
-                            width: '100%',
+                            alignItems: "center",
+                            position: "absolute",
+                            width: "100%",
                             top: statusOpenModal ? undefined : 310,
                             bottom: statusOpenModal ? 20 : undefined,
                           }}
                         >
                           <View
                             style={{
-                              width: '90%',
+                              width: "90%",
                               height: 50,
 
-                              flexDirection: 'row',
+                              flexDirection: "row",
                             }}
                           >
                             <TouchableOpacity
                               style={{
                                 borderRadius: 10,
                                 marginHorizontal: 10,
-                                width: '20%',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                backgroundColor: 'black',
+                                width: "20%",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                backgroundColor: "black",
                               }}
                               onPress={() => {
-                                handleGoBack()
+                                handleGoBack();
                               }}
                             >
                               <Ionicons
                                 name="arrow-back"
                                 size={35}
-                                color={'white'}
+                                color={"white"}
                               />
                             </TouchableOpacity>
 
@@ -691,10 +705,10 @@ const ModalCreateRequest = ({
                                   {
                                     dataTravelContext.dataTravel.lat_user === 0
                                       ? toast(
-                                          'Sin dirección de origen',
-                                          'DANGER',
+                                          "Sin dirección de origen",
+                                          "DANGER"
                                         )
-                                      : setCurrentPage(3)
+                                      : setCurrentPage(3);
                                   }
                                 } else {
                                   {
@@ -702,18 +716,18 @@ const ModalCreateRequest = ({
                                       0 ||
                                     dataTravelContext.dataTravel.lng_end === 0
                                       ? toast(
-                                          'Completa las dirrecciones',
-                                          'DANGER',
+                                          "Completa las dirrecciones",
+                                          "DANGER"
                                         )
-                                      : setCurrentPage(3)
+                                      : setCurrentPage(3);
                                   }
                                 }
                               }}
                               style={{
                                 borderRadius: 10,
                                 flex: 1,
-                                alignItems: 'center',
-                                justifyContent: 'center',
+                                alignItems: "center",
+                                justifyContent: "center",
                                 backgroundColor: stateTypeTravel
                                   ? INPUT1
                                   : PRIMARY_COLOR,
@@ -726,13 +740,13 @@ const ModalCreateRequest = ({
                           </View>
                         </View>
                       </View>
-                    )
+                    );
                   case 3:
                     return (
                       <View
                         style={{
-                          width: '100%',
-                          height: '100%',
+                          width: "100%",
+                          height: "100%",
                         }}
                       >
                         <View
@@ -745,15 +759,15 @@ const ModalCreateRequest = ({
                           <TextModal
                             text={
                               stateTypeTravel
-                                ? 'Tu pedido esta en: '
-                                : '¿Dónde estas?'
+                                ? "Tu pedido esta en: "
+                                : "¿Dónde estas?"
                             }
                           />
                           <InputText
                             value={dataTravelContext.dataTravel.address_user}
                             styleText={{
                               height: 48,
-                              backgroundColor: '#D3D3D3',
+                              backgroundColor: "#D3D3D3",
                             }}
                             styleTextInput={styles.styletextInput}
                             editable={false}
@@ -768,11 +782,11 @@ const ModalCreateRequest = ({
                             styleText={{ height: 48, top: -6 }}
                             styleTextInput={styles.styletextInput}
                             name="casa"
-                            keyboardType={'numeric'}
+                            keyboardType={"numeric"}
                             maxLength={7}
                             value={number_house}
                             onChange={(value: any) =>
-                              onChange(value, 'number_house')
+                              onChange(value, "number_house")
                             }
                           />
 
@@ -782,13 +796,13 @@ const ModalCreateRequest = ({
                           />
                           <InputText
                             name="casa"
-                            keyboardType={'default'}
+                            keyboardType={"default"}
                             maxLength={35}
                             value={reference}
                             styleText={{ height: 48, top: -6 }}
                             styleTextInput={styles.styletextInput}
                             onChange={(value: any) =>
-                              onChange(value, 'reference')
+                              onChange(value, "reference")
                             }
                           />
 
@@ -805,66 +819,66 @@ const ModalCreateRequest = ({
 
                           <View
                             style={{
-                              alignItems: 'center',
+                              alignItems: "center",
                               marginTop: 40,
-                              width: '100%',
+                              width: "100%",
                               top: statusOpenModal ? undefined : 240,
                               bottom: statusOpenModal ? 20 : undefined,
-                              position: 'absolute',
+                              position: "absolute",
                             }}
                           >
                             <View
                               style={{
-                                width: '100%',
+                                width: "100%",
                                 height: 50,
-                                flexDirection: 'row',
+                                flexDirection: "row",
                               }}
                             >
                               <TouchableOpacity
                                 style={{
-                                  width: '20%',
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  backgroundColor: 'black',
+                                  width: "20%",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  backgroundColor: "black",
                                   borderRadius: 10,
                                   marginHorizontal: 10,
                                 }}
                                 onPress={() => {
-                                  handleGoBack()
+                                  handleGoBack();
                                 }}
                               >
                                 <Ionicons
                                   name="arrow-back"
                                   size={35}
-                                  color={'white'}
+                                  color={"white"}
                                 />
                               </TouchableOpacity>
 
                               <TouchableOpacity
                                 onPress={() => {
                                   if (!stateTypeTravel) {
-                                    setCurrentPage(4)
+                                    setCurrentPage(4);
                                   } else {
                                     const newErrors = {
                                       reference: false,
                                       order_description: false,
-                                    }
-                                    if (form.reference === '') {
-                                      if (reference === '') {
-                                        newErrors.reference = true
+                                    };
+                                    if (form.reference === "") {
+                                      if (reference === "") {
+                                        newErrors.reference = true;
                                       }
-                                      setErrors(newErrors)
+                                      setErrors(newErrors);
                                     } else {
-                                      newErrors.reference = false
-                                      setErrors(newErrors)
-                                      setCurrentPage(4)
+                                      newErrors.reference = false;
+                                      setErrors(newErrors);
+                                      setCurrentPage(4);
                                     }
                                   }
                                 }}
                                 style={{
                                   flex: 1,
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
+                                  alignItems: "center",
+                                  justifyContent: "center",
                                   backgroundColor: stateTypeTravel
                                     ? INPUT1
                                     : PRIMARY_COLOR,
@@ -881,14 +895,14 @@ const ModalCreateRequest = ({
                           </View>
                         </View>
                       </View>
-                    )
+                    );
                   case 4:
                     return (
                       <>
                         <View
                           style={{
-                            width: '100%',
-                            height: '100%',
+                            width: "100%",
+                            height: "100%",
                           }}
                         >
                           <View
@@ -901,8 +915,8 @@ const ModalCreateRequest = ({
                             <TextModal
                               text={
                                 stateTypeTravel
-                                  ? '¿Qué deseas pedir hoy?'
-                                  : 'Selecciona tu servicio (Opcional)'
+                                  ? "¿Qué deseas pedir hoy?"
+                                  : "Selecciona tu servicio (Opcional)"
                               }
                             />
                             {stateTypeTravel ? (
@@ -913,7 +927,7 @@ const ModalCreateRequest = ({
                                   value={order_description}
                                   name="order_description"
                                   onChange={(value: any) =>
-                                    onChange(value, 'order_description')
+                                    onChange(value, "order_description")
                                   }
                                 />
                                 <ErrorMessage
@@ -930,18 +944,18 @@ const ModalCreateRequest = ({
                             ) : (
                               <View
                                 style={{
-                                  width: '100%',
-                                  alignItems: 'center',
+                                  width: "100%",
+                                  alignItems: "center",
                                 }}
                               >
                                 <View
                                   style={{
-                                    backgroundColor: 'white',
-                                    width: '80%',
+                                    backgroundColor: "white",
+                                    width: "80%",
                                     borderRadius: 15,
                                     elevation: 22,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
+                                    justifyContent: "center",
+                                    alignItems: "center",
                                     shadowOffset: {
                                       width: 0,
                                       height: 6,
@@ -952,12 +966,12 @@ const ModalCreateRequest = ({
                                 >
                                   <View
                                     style={{
-                                      width: '100%',
+                                      width: "100%",
 
-                                      flexDirection: 'row',
+                                      flexDirection: "row",
 
-                                      justifyContent: 'center',
-                                      alignItems: 'center',
+                                      justifyContent: "center",
+                                      alignItems: "center",
                                     }}
                                   >
                                     <CheckboxBtn
@@ -995,12 +1009,12 @@ const ModalCreateRequest = ({
 
                                   <View
                                     style={{
-                                      width: '100%',
+                                      width: "100%",
 
-                                      flexDirection: 'row',
+                                      flexDirection: "row",
 
-                                      justifyContent: 'center',
-                                      alignItems: 'center',
+                                      justifyContent: "center",
+                                      alignItems: "center",
                                     }}
                                   >
                                     <CheckboxBtn
@@ -1035,12 +1049,12 @@ const ModalCreateRequest = ({
 
                                   <View
                                     style={{
-                                      width: '100%',
+                                      width: "100%",
 
-                                      flexDirection: 'row',
+                                      flexDirection: "row",
 
-                                      justifyContent: 'center',
-                                      alignItems: 'center',
+                                      justifyContent: "center",
+                                      alignItems: "center",
                                     }}
                                   >
                                     <CheckboxBtn
@@ -1079,39 +1093,39 @@ const ModalCreateRequest = ({
 
                             <View
                               style={{
-                                width: '100%',
+                                width: "100%",
                                 height: 50,
-                                flexDirection: 'row',
+                                flexDirection: "row",
                                 top: statusOpenModal ? undefined : 240,
                                 bottom: statusOpenModal ? 20 : undefined,
-                                position: 'absolute',
+                                position: "absolute",
                               }}
                             >
                               <TouchableOpacity
                                 style={{
-                                  width: '20%',
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  backgroundColor: 'black',
+                                  width: "20%",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  backgroundColor: "black",
                                   borderRadius: 10,
                                   marginHorizontal: 10,
                                 }}
                                 onPress={() => {
-                                  handleGoBack()
+                                  handleGoBack();
                                 }}
                               >
                                 <Ionicons
                                   name="arrow-back"
                                   size={35}
-                                  color={'white'}
+                                  color={"white"}
                                 />
                               </TouchableOpacity>
 
                               <TouchableOpacity
                                 style={{
                                   flex: 1,
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
+                                  alignItems: "center",
+                                  justifyContent: "center",
                                   backgroundColor: stateTypeTravel
                                     ? INPUT1
                                     : PRIMARY_COLOR,
@@ -1123,45 +1137,47 @@ const ModalCreateRequest = ({
                                       order_description: false,
                                       number_house: false,
                                       reference: false,
-                                    }
-                                    if (form.order_description === '') {
-                                      if (order_description === '') {
-                                        newErrors.order_description = true
+                                    };
+                                    if (form.order_description === "") {
+                                      if (order_description === "") {
+                                        newErrors.order_description = true;
                                       }
-                                      setErrors(newErrors)
+                                      setErrors(newErrors);
                                     } else {
-                                      newErrors.order_description = false
-                                      setErrors(newErrors)
-                                      handleTravel()
+                                      newErrors.order_description = false;
+                                      setErrors(newErrors);
+                                      handleTravel();
                                     }
                                   } else {
-                                    handleTravel()
+                                    handleTravel();
                                   }
                                 }}
                               >
                                 <Text
                                   style={{ ...globalStyles.TitleSecondary }}
                                 >
-                                  {stateTypeTravel ? 'Enviar' : 'Viajar'}
+                                  {stateTypeTravel ? "Enviar" : "Viajar"}
                                 </Text>
                               </TouchableOpacity>
                             </View>
                           </View>
                         </View>
                       </>
-                    )
+                    );
 
                   default:
-                    return 1
+                    return 1;
                 }
               })()}
             </>
           )}
         </View>
-      </BottomSheet>
+        {/* </BottomSheetView> */}
+        {/* </BottomSheet> */}
+      </Modal>
     </>
-  )
-}
+  );
+};
 
 const thirdIndicatorStyles = {
   stepIndicatorSize: 0, // Establecer tamaño a 0 para que desaparezca
@@ -1171,19 +1187,19 @@ const thirdIndicatorStyles = {
   stepStrokeWidth: 0, // Establecer ancho a 0 para que desaparezca
   stepIndicatorLabelFontSize: 0, // Establecer tamaño a 0 para que desaparezca
   currentStepIndicatorLabelFontSize: 0, // Establecer tamaño a 0 para que desaparezca
-  labelColor: 'transparent', // Establecer color transparente para que desaparezca
-  currentStepLabelColor: 'transparent', // Establecer color transparente para que desaparezca
-}
+  labelColor: "transparent", // Establecer color transparente para que desaparezca
+  currentStepLabelColor: "transparent", // Establecer color transparente para que desaparezca
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   blurView: {
     flex: 1,
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
@@ -1200,7 +1216,7 @@ const styles = StyleSheet.create({
   },
   stylebtn: {
     marginHorizontal: 15,
-    width: '92%',
+    width: "92%",
     height: 43,
     top: screenHeight > 700 ? 25 : 10,
   },
@@ -1208,7 +1224,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "red",
     marginTop: -150,
   },
-  styletextInput: { right: 50, alignSelf: 'center' },
-})
+  styletextInput: { right: 50, alignSelf: "center" },
+});
 
-export default ModalCreateRequest
+export default ModalCreateRequest;

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { useState } from 'react';
+import { View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { TouchableOpacity } from '@gorhom/bottom-sheet';
 
 interface Props{
     calification: (rating: number) => void;
