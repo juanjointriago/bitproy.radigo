@@ -60,7 +60,7 @@ export const travelInitialState: travelProgress = {
 
 type TravelContextProps = {
   dataTravelContext: travelProgress
-  changeTravel: (data: InterfaceTravelById) => void
+  changeTravel: (data: InterfaceTravelById) => Promise<void>
   removeTravel: () => void
   init:() => void
 }
@@ -97,7 +97,8 @@ export const TravelProvider = ({ children }: any) => {
     await changeTravel(objResp)
     
     if (objResp.status_id === 6) {
-      return await changeTravel(objResp)
+      await changeTravel(objResp)
+      return;
     }
     try {
       
@@ -137,11 +138,13 @@ export const TravelProvider = ({ children }: any) => {
 
   const changeTravel = async (data: InterfaceTravelById) => {
     console.debug('👀 changeTravel =>', {data})
+    console.log('CHNAGING...');
+    
     dispatch({
       type: 'changeTravel',
       payload: { dataTravel: data },
-    })
-
+    });
+    
     await AsyncStorage.setItem('travelStorage', JSON.stringify(data))
   }
 

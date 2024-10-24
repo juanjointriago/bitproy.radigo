@@ -31,10 +31,25 @@ const useTravel = () => {
   };
 
   const getTravelRequestToDayDriver = async () => {
-    const resp = await radigoApi.get<ResponseTravelsByDriver>(
-      `/travel/request`
-    );
-    return resp.data;
+    try {
+      const { data } = await radigoApi.get<ResponseTravelsByDriver>(
+        `/travel/request`
+      );
+
+      console.log(`RESULT => ${data}`);
+      
+
+      return data;
+    } catch (error) {
+      console.log(error);
+      throw new Error("error!");
+      
+    }
+
+    // const resp = await radigoApi.get<ResponseTravelsByDriver>(
+    //   `/travel/request`
+    // );
+    // return resp.data;
   };
 
   const putTravel = async (

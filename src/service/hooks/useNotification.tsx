@@ -69,11 +69,18 @@ export const useNotification = () => {
     return token
   }
 
-  const updateToken = () => {
-    registerForPushNotificationsAsyn().then(async (token) => {
-      updateDataUser({ expo_token: token })
-      toast('Token de notificación actualizado', 'WARNING')
-    })
+  const updateToken = async () => {
+    try {
+      const token = await registerForPushNotificationsAsyn();
+      updateDataUser({ expo_token: token });
+      toast('Token de notificación actualizado', 'WARNING');
+    } catch (error) {
+      console.log(error);
+    }
+    // registerForPushNotificationsAsyn().then(async (token) => {
+    //   updateDataUser({ expo_token: token })
+    //   toast('Token de notificación actualizado', 'WARNING')
+    // })
   }
 
   const sendMesaage = async (token: any, description: string, data?: {}) => {

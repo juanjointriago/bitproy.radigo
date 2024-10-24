@@ -57,7 +57,7 @@ import * as Notifications from "expo-notifications";
 import { useSocket } from "../../service/hooks/useSockets";
 import ModalListAdmins from "../../components/modals/Citizen/ModalListAdmins";
 
-interface Props extends StackScreenProps<any, any> {}
+interface Props extends StackScreenProps<any, any> { }
 
 export const HomeDriverScreen = ({ navigation }: Props) => {
   const navigator = useNavigation();
@@ -222,18 +222,29 @@ export const HomeDriverScreen = ({ navigation }: Props) => {
   };
 
   const getDataTravels = async () => {
-    await AsyncStorage.setItem("hasBackgroundData", "NO");
-    getTravelRequestToDayDriver()
-      .then((res) => {
-        setDataTravels(res.data.travels.reverse());
-      })
-      .catch((err: any) => {
-        navigation.navigate("MyCarsScreen");
-        toast(
-          err?.response?.data.msg || "Lo sentimos, ocurrio un error",
-          "WARNING"
-        );
-      });
+    try {
+      await AsyncStorage.setItem("hasBackgroundData", "NO");
+      const data = await getTravelRequestToDayDriver();
+      setDataTravels(data.data.travels.reverse())
+    } catch (error) {
+      navigation.navigate("MyCarsScreen");
+      toast(
+        // error?.response?.data.msg || "Lo sentimos, ocurrio un error",
+        "Lo sentimos, ocurrio un error",
+        "WARNING"
+      );
+    }
+    // getTravelRequestToDayDriver()
+    //   .then((res) => {
+    //     setDataTravels(res.data.travels.reverse());
+    //   })
+    //   .catch((err: any) => {
+    //     navigation.navigate("MyCarsScreen");
+    //     toast(
+    //       err?.response?.data.msg || "Lo sentimos, ocurrio un error",
+    //       "WARNING"
+    //     );
+    //   });
   };
 
   const refreshTravelsBtn = () => {
@@ -246,16 +257,24 @@ export const HomeDriverScreen = ({ navigation }: Props) => {
   };
 
   const acceptTravelFunc = async () => {
-    setLoading(true);
-    const resp = await changeTravelFunc("accept");
-    if (resp) {
-      setLoading(false);
-      getDataTravels();
-      setOpenModalDescription(true);
-      await AsyncStorage.setItem("hasBackgroundData", "NO");
-    } else {
-      setLoading(false);
-      removedTravelData();
+    try {
+      setLoading(true);
+      const resp = await changeTravelFunc("accept");
+      if (resp) {
+        setLoading(false);
+        await getDataTravels();
+
+        console.log('FINISH GET DATA TRAVELS');
+
+
+        setOpenModalDescription(true);
+        await AsyncStorage.setItem("hasBackgroundData", "NO");
+      } else {
+        setLoading(false);
+        removedTravelData();
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -386,44 +405,80 @@ export const HomeDriverScreen = ({ navigation }: Props) => {
       });
   };
 
-  const changeTravelFunc = async (
-    status: "accept" | "complete" | "cancel" | "traveling"
-  ) => {
-    return new Promise<boolean>((resolve) => {
-      putTravel(status, selectTravel?.id || dataTravelContext.dataTravel.id)
-        .then(async (res) => {
-          const resValidation: any = await validationMyTravel(res.data.id);
-          if (!resValidation) {
-            resolve(false);
-            return toast(
-              "Lo sentimos, este viaje fue aceptado por otro conductor",
-              "WARNING"
-            );
-          }
 
-          toast(resValidation.msg, "SUCCESS");
-          changeTravel(resValidation.data);
-          resolve(true);
-          switch (status) {
-            case "accept":
-              return socket?.emit("accept-travel", {
-                idTravel: res.data.id,
-              });
-            case "cancel":
-              return socket?.emit("cancel-travel", {
-                idTravel: res.data.id,
-              });
-          }
-        })
-        .catch((err) => {
-          console.log("💟💟", err.response.data);
-          toast(
-            err?.response?.data.msg || "Lo sentimos, ocurrió un error",
-            "WARNING"
-          );
-          resolve(false);
-        });
-    });
+  // TODO: REVISAR ESTA FUNCION, SE DEBE REFACTORIZAR
+  const changeTravelFunc = async (status: "accept" | "complete" | "cancel" | "traveling") => {
+    try {
+      const res = await putTravel(status, selectTravel.id || dataTravelContext.dataTravel.id);
+      const resValidation: any = await validationMyTravel(res.data.id);
+      if (!resValidation) {
+        return toast(
+          "Lo sentimos, este viaje fue aceptado por otro conductor",
+          "WARNING"
+        );
+      }
+
+      toast(resValidation.msg, "SUCCESS");
+
+      switch (status) {
+        case "accept":
+          socket?.emit("accept-travel", {
+            idTravel: res.data.id,
+          });
+          break;
+        case "cancel":
+          socket?.emit("cancel-travel", {
+            idTravel: res.data.id,
+          });
+          break;
+        default:
+          break;
+      }
+      await changeTravel(resValidation.data);
+      return true;
+    } catch (error) {
+      console.log("💟💟", (error as any)?.response?.data);
+      toast(
+        (error as any)?.response?.data?.msg || "Lo sentimos, ocurrió un error",
+        "WARNING"
+      );
+      return false;
+    }
+    // return new Promise<boolean>((resolve) => {
+    //   putTravel(status, selectTravel?.id || dataTravelContext.dataTravel.id)
+    //     .then(async (res) => {
+    //       const resValidation: any = await validationMyTravel(res.data.id);
+    //       if (!resValidation) {
+    //         resolve(false);
+    //         return toast(
+    //           "Lo sentimos, este viaje fue aceptado por otro conductor",
+    //           "WARNING"
+    //         );
+    //       }
+
+    //       toast(resValidation.msg, "SUCCESS");
+    //       changeTravel(resValidation.data);
+    //       resolve(true);
+    //       switch (status) {
+    //         case "accept":
+    //           return socket?.emit("accept-travel", {
+    //             idTravel: res.data.id,
+    //           });
+    //         case "cancel":
+    //           return socket?.emit("cancel-travel", {
+    //             idTravel: res.data.id,
+    //           });
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log("💟💟", err.response.data);
+    //       toast(
+    //         err?.response?.data.msg || "Lo sentimos, ocurrió un error",
+    //         "WARNING"
+    //       );
+    //       resolve(false);
+    //     });
+    // });
   };
 
   const validationMyTravel = async (idTravel: number) => {
@@ -464,7 +519,7 @@ export const HomeDriverScreen = ({ navigation }: Props) => {
           return [data, ...filteredData];
         });
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const onDriverListenAcceptTravel = async () => {
@@ -474,7 +529,7 @@ export const HomeDriverScreen = ({ navigation }: Props) => {
           changeTravel(res);
         }
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const onDriverListenRemoveTravels = async () => {
@@ -482,7 +537,7 @@ export const HomeDriverScreen = ({ navigation }: Props) => {
       socket!.on(`drivers-listen-remove-travel`, (res: any) => {
         console.log("💦💦💦", res);
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const onCancelTravel = async () => {
@@ -491,7 +546,7 @@ export const HomeDriverScreen = ({ navigation }: Props) => {
         removedTravelData();
         getDataTravels();
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const onListenCancelTravelById = () => {
@@ -500,7 +555,7 @@ export const HomeDriverScreen = ({ navigation }: Props) => {
         removedTravelData();
         getDataTravels();
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const socketOnNewMessage = () => {
@@ -676,11 +731,11 @@ export const HomeDriverScreen = ({ navigation }: Props) => {
           dataTravels={dataTravels}
           selectTravel={selectTravel}
           snapPoints={
-            useMemo(()=>
-            user?.is_available === false
-              ? [100, 110]
-              : [100, modalInit === "loadTravels" ? "90%" : "45%"]
-            ,[])
+            useMemo(() =>
+              user?.is_available === false
+                ? [100, 110]
+                : [100, modalInit === "loadTravels" ? "90%" : "45%"]
+              , [])
           }
           state={showBottomSheetModaNewrequest}
           close={setShowBottomSheetModalNewRequest}

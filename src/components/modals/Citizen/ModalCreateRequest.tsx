@@ -701,27 +701,43 @@ const ModalCreateRequest = ({
 
                             <TouchableOpacity
                               onPress={() => {
-                                if (!stateTypeTravel) {
-                                  {
-                                    dataTravelContext.dataTravel.lat_user === 0
-                                      ? toast(
-                                          "Sin dirección de origen",
-                                          "DANGER"
-                                        )
-                                      : setCurrentPage(3);
-                                  }
-                                } else {
-                                  {
-                                    dataTravelContext.dataTravel.lat_user ===
-                                      0 ||
-                                    dataTravelContext.dataTravel.lng_end === 0
-                                      ? toast(
-                                          "Completa las dirrecciones",
-                                          "DANGER"
-                                        )
-                                      : setCurrentPage(3);
-                                  }
+                                console.log('PRESS IN!!');
+
+                                if(dataTravelContext.dataTravel.lat_user === 0 || dataTravelContext.dataTravel.lng_end === 0) {
+                                  toast(
+                                    "Completa las direcciones",
+                                    "DANGER"
+                                  );
+                                  console.log('should appear toast!!');
+                                }else {
+                                  setCurrentPage(3);
                                 }
+
+                                // if (!stateTypeTravel) {
+                                //   if(dataTravelContext.dataTravel.lat_user === 0) {
+                                //     toast(
+                                //       "Sin dirección de origen",
+                                //       "DANGER"
+                                //     );
+                                //   }else {
+                                //     setCurrentPage(3);
+                                //   }
+                                //   // dataTravelContext.dataTravel.lat_user === 0
+                                //   //   ? toast(
+                                //   //     "Sin dirección de origen",
+                                //   //     "DANGER"
+                                //   //   )
+                                //   //   : setCurrentPage(3);
+                                // } else {
+                                //   dataTravelContext.dataTravel.lat_user ===
+                                //     0 ||
+                                //     dataTravelContext.dataTravel.lng_end === 0
+                                //     ? toast(
+                                //       "Completa las dirrecciones",
+                                //       "DANGER"
+                                //     )
+                                //     : setCurrentPage(3);
+                                // }
                               }}
                               style={{
                                 borderRadius: 10,
